@@ -1,4 +1,3 @@
-
 name: py-app4-cicd
 
 on:
@@ -45,6 +44,7 @@ jobs:
           echo ${{needs.ci.outputs.commit_id}}
           pip install yq
           yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/py-app4/values-dev.yaml
+
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
@@ -56,6 +56,7 @@ jobs:
           curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
           chmod +x argocd
           sudo mv ./argocd /usr/local/bin/argocd
+
       - name: argocd login
         shell: bash
         run: |
@@ -64,12 +65,15 @@ jobs:
             --grpc-web \
             --username admin \
             --password  ${{ secrets.ARGOCD_PASSWORD }}
+
       - name: Ensure argocd repo and app
         shell: bash
         run: |
+
           # Connects the argocd repo
           repo="https://github.com/ricardoandre-97/py-app4.git"
           argocd repo list | grep -q $repo || argocd repo add $repo
+
           # Creates the argocd app
           argocd app get py-app4 || argocd app create py-app4 \
             --repo $repo \
@@ -80,6 +84,7 @@ jobs:
             --revision master \
             --sync-policy manual \
             --sync-option CreateNamespace=true
+
       - name: Argocd app sync
         shell: bash
         run: |
