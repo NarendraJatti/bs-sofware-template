@@ -1,8 +1,8 @@
 replicaCount: 1
 image:
-  repository: narendra22/${{values.app_name}}
+  repository: nginx
   pullPolicy: IfNotPresent
-  tag: ${{values.app_name}}-${{values.app_env}}-latest
+  tag: latest
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
