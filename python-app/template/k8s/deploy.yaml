@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: python-app
-        image: nginx
+        image: nginx:local
         ports:
         - containerPort: 5000
